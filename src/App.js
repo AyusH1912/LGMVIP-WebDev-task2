@@ -1,24 +1,57 @@
+import React from "react";
+import {BrowserRouter as Router} from "react-router-dom";
+import Cards from "./Components/Cards";
+import Footer from "./Components/Footer";
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
+  const [isDateLoaded,setIsDateLoaded] = React.useState(false);
+  const [userData,setUserData] = React.useState([]);
+  const [isButtonClicked,setisButtonClicked] = React.useState(false);
+  const handleClicked=()=>{
+    setisButtonClicked(true);
+    fetch("https://reqres.in/api/users?page=1").then((response)=>response.json()).then((res)=>{setUserData(res.data);
+  setInterval(()=>{
+    setIsDateLoaded(true);
+  },1700);
+})
+.catch((err)=>{
+  console.log(err);
+});
+  };
+  return (<>
+  <Router>
+    <section className="container">
+      <div class="nav" id="mynav">
+        <a rel="noreferrer" href="" class="active">
+          Zippy
         </a>
-      </header>
-    </div>
+        <a href="#getusers" class="btn" onClick={handleClicked}>
+          Get Users
+        </a>
+      </div>
+      <div className="container1">
+        <div className="row justify-content-center">
+          {isButtonClicked?(
+            isDateLoaded?(
+              <Cards userData={userData} />
+            ):(
+              <div class="loader"></div>
+            )
+          ):(
+            <div className="intro">
+              <p>Welcome to Zippy</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+    <section>
+      <Footer />
+    </section>
+  </Router>
+    </>
   );
 }
 
